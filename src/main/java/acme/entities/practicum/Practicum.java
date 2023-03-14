@@ -1,11 +1,15 @@
 
 package acme.entities.practicum;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -23,46 +27,46 @@ import lombok.Setter;
 @Setter
 public class Practicum extends AbstractEntity {
 
-	protected static final long	serialVersionUID	= 1L;
+	protected static final long serialVersionUID = 1L;
 
 	@Column(unique = true)
 	@NotBlank
 	@Pattern(regexp = "[A-Z]{1,3}[0-9]{3}")
-	protected String			code;
+	protected String code;
 
 	@NotBlank
 	@Length(min = 1, max = 75)
-	protected String			title;
+	protected String title;
 
 	@NotBlank
 	@Length(min = 1, max = 100)
-	protected String			abstrac;
+	protected String practicumAbstract;
 
 	@NotBlank
 	@Length(min = 1, max = 100)
-	protected String			goals;
+	protected String goals;
 
-	protected boolean			draftMode;
+	protected boolean draftMode;
+
+	@NotNull
+	@Temporal(TemporalType.DATE)
+	protected Date startingDate;
+
+	@NotNull
+	@Temporal(TemporalType.DATE)
+	protected Date endingDate;
 
 	@NotNull
 	@Valid
 	@ManyToOne(optional = false)
-	protected Course			course;
+	protected Course course;
 
-	@Transient
 	@Digits(integer = 4, fraction = 2)
-	protected Double			sessionsTotalOfHours;
+	@DecimalMin(value = "168.00")
+	protected double estimatedTotalTime;
 
-	@Transient
 	@Digits(integer = 4, fraction = 2)
-	protected double			sessionsTotalOfHoursPlusTenPercent;
-
-	@Transient
-	@Digits(integer = 4, fraction = 2)
-	protected double			sessionsTotalOfHoursMinusTenPercent;
-
-	@Transient
-	@Digits(integer = 4, fraction = 2)
-	protected double			practicaPeriodLength;
+	@DecimalMin(value = "168.00")
+	protected double practicaPeriodLength;
 
 }
