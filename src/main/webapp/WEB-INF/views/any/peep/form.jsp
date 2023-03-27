@@ -4,9 +4,10 @@
 <%@taglib prefix="acme" uri="http://www.the-acme-framework.org/"%>
 
 <acme:form>
-	<acme:input-textbox code="any.peep.form.label.company" path="company"/>
-	<acme:input-textbox code="any.peep.form.label.sector" path="sector"/>
-	
-	<acme:submit test="${_command == 'create'}" code="authenticated.consumer.form.button.create" action="/authenticated/consumer/create"/>
-	<acme:submit test="${_command == 'update'}" code="authenticated.consumer.form.button.update" action="/authenticated/consumer/update"/>
+	<acme:input-moment code="any.peep.form.label.instantiationMoment" path="instantiationMoment"/>
+	<acme:input-textbox code="any.peep.form.label.title" path="title"/>
+	<acme:input-textbox code="any.peep.form.label.nick" path="nick"/>
+	<acme:input-textbox code="any.peep.form.label.message" path="message"/>
+	<acme:input-email code="any.peep.form.label.email" path="email"/>
+	<acme:input-url code="any.peep.form.label.moreInfo" path="moreInfo"/>
 </acme:form>

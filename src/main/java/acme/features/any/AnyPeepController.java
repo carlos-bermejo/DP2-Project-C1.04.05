@@ -14,7 +14,7 @@ import acme.framework.controllers.AbstractController;
 public class AnyPeepController extends AbstractController<Any, Peep> {
 
 	@Autowired
-	protected AnyPeepCreateService	createService;
+	protected AnyPeepListService	listService;
 
 	@Autowired
 	protected AnyPeepShowService	showService;
@@ -22,7 +22,7 @@ public class AnyPeepController extends AbstractController<Any, Peep> {
 
 	@PostConstruct
 	protected void initialise() {
-		super.addBasicCommand("create", this.createService);
+		super.addBasicCommand("list", this.listService);
 		super.addBasicCommand("show", this.showService);
 	}
 }

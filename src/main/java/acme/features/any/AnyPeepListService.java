@@ -1,6 +1,8 @@
 
 package acme.features.any;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 
 @Service
-public class AnyPeepShowService extends AbstractService<Any, Peep> {
+public class AnyPeepListService extends AbstractService<Any, Peep> {
 
 	@Autowired
 	protected AnyPeepRepository repository;
@@ -18,9 +20,7 @@ public class AnyPeepShowService extends AbstractService<Any, Peep> {
 
 	@Override
 	public void check() {
-		boolean status;
-		status = super.getRequest().hasData("id", int.class);
-		super.getResponse().setChecked(status);
+		super.getResponse().setChecked(true);
 	}
 
 	@Override
@@ -30,8 +30,7 @@ public class AnyPeepShowService extends AbstractService<Any, Peep> {
 
 	@Override
 	public void load() {
-		final int id = super.getRequest().getData("id", int.class);
-		final Peep object = this.repository.showPeep(id);
+		final List<Peep> object = this.repository.listPeeps();
 		super.getBuffer().setData(object);
 	}
 
