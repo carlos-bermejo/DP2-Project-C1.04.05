@@ -1,0 +1,15 @@
+
+package acme.features.administrator;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import acme.entities.SystemCurrency;
+import acme.framework.repositories.AbstractRepository;
+
+@Repository
+public interface AdministratorSystemCurrencyRepository extends AbstractRepository {
+
+	@Query("select s from SystemCurrency s")
+	SystemCurrency showSystemCurrency();
+}
