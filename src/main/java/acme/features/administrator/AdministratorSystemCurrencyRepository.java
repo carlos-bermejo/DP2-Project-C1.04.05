@@ -10,6 +10,6 @@ import acme.framework.repositories.AbstractRepository;
 @Repository
 public interface AdministratorSystemCurrencyRepository extends AbstractRepository {
 
-	@Query("select s from SystemCurrency s")
+	@Query("select sc from SystemCurrency sc")
 	SystemCurrency showSystemCurrency();
 }
