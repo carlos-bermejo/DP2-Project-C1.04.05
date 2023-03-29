@@ -1,5 +1,5 @@
 
-package acme.features.administrator;
+package acme.features.administrator.systemcurrency;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
