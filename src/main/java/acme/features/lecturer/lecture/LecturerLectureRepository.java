@@ -1,23 +1,22 @@
 
-package acme.features.lecturer.course;
+package acme.features.lecturer.lecture;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import acme.entities.course.Course;
 import acme.entities.course.Lecture;
 import acme.framework.repositories.AbstractRepository;
 
 @Repository
-public interface LecturerCourseRepository extends AbstractRepository {
+public interface LecturerLectureRepository extends AbstractRepository {
 
-	@Query("select c from Course c where c.id = :id")
-	public Course showCourse(int id);
+	@Query("select l from Lecture l where l.id = :id")
+	public Lecture showLecture(int id);
 
-	@Query("select c from Course c where c.lecturer.userAccount.id = :id")
-	public List<Course> listCoursesFromLecturer(int id);
+	@Query("select cl.lecture from CourseLecture cl where cl.course.lecturer.userAccount.id = :id")
+	public List<Lecture> listAllLecturesFromLecturer(int id);
 
 	@Query("select cl.lecture from CourseLecture cl where cl.course.id = :id")
 	public List<Lecture> listLecturesFromCourse(int id);
