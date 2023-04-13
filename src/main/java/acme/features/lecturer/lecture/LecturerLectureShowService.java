@@ -35,7 +35,7 @@ public class LecturerLectureShowService extends AbstractService<Lecturer, Lectur
 		boolean status;
 		final Principal principal = super.getRequest().getPrincipal();
 		final int id = super.getRequest().getData("id", int.class);
-		final Lecture lecture = this.repository.showLecture(id);
+		final Lecture lecture = this.repository.getLectureById(id);
 		status = lecture.getLecturer().getUserAccount().getId() == principal.getAccountId();
 		super.getResponse().setAuthorised(status);
 	}
@@ -43,7 +43,7 @@ public class LecturerLectureShowService extends AbstractService<Lecturer, Lectur
 	@Override
 	public void load() {
 		final int id = super.getRequest().getData("id", int.class);
-		final Lecture object = this.repository.showLecture(id);
+		final Lecture object = this.repository.getLectureById(id);
 
 		super.getBuffer().setData(object);
 	}
@@ -52,8 +52,9 @@ public class LecturerLectureShowService extends AbstractService<Lecturer, Lectur
 	public void unbind(final Lecture object) {
 		Tuple tuple;
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo");
+		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo", "draftMode");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
+		tuple.put("lecturerId", lecturer.getId());
 		super.getResponse().setData(tuple);
 	}
 }

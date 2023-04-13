@@ -14,6 +14,7 @@ lecturer.lecture.list.label.nature = Nature
 lecturer.lecture.list.label.retailPrice = Body
 lecturer.lecture.list.label.moreInfo = More info
 lecturer.lecture.list.label.lecturer = Lecturer
+lecturer.lecture.list.button.create = Create
 
 lecturer.lecture.form.label.title = Title
 lecturer.lecture.form.label.lectureAbstract = Abstract
@@ -21,6 +22,9 @@ lecturer.lecture.form.label.nature = Nature
 lecturer.lecture.form.label.retailPrice = Body
 lecturer.lecture.form.label.moreInfo = More info
 lecturer.lecture.form.label.lecturer = Lecturer
-
-
-
+lecturer.lecture.form.button.update = Update
+lecturer.lecture.form.button.create = Create
+lecturer.lecture.form.button.submitUpdate = Submit
+lecturer.lecture.form.button.delete = Delete
+lecturer.lecture.form.button.publish = Publish
+lecturer.lecture.form.label.draftMode = Draft mode

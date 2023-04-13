@@ -13,6 +13,6 @@
 	<acme:input-url code="lecturer.course.form.label.moreInfo" path="moreInfo"/>
 	<acme:input-textbox code="lecturer.course.form.label.lecturer" path="lecturer"/>
 	<jstl:if test="${_command == 'show' }">
-		<acme:button code="lecturer.course.form.label.lectures" action="/lecturer/lecture/listFromCourse?masterId=${id}"/>
+		<acme:button code="lecturer.course.form.button.lectures" action="/lecturer/lecture/list-from-course?masterId=${id}"/>
 	</jstl:if>
 </acme:form>
