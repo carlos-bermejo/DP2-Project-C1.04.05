@@ -16,7 +16,7 @@ public interface LecturerCourseRepository extends AbstractRepository {
 	@Query("select c from Course c where c.id = :id")
 	public Course showCourse(int id);
 
-	@Query("select c from Course c where c.lecturer.userAccount.id = :id and c.draftMode = false")
+	@Query("select c from Course c where c.lecturer.userAccount.id = :id")
 	public List<Course> listCoursesFromLecturer(int id);
 
 	@Query("select cl.lecture from CourseLecture cl where cl.course.id = :id")

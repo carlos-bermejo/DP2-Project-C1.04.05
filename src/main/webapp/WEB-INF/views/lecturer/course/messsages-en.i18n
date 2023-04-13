@@ -23,6 +23,7 @@ lecturer.course.form.label.nature = Nature
 lecturer.course.form.label.retailPrice = Price
 lecturer.course.form.label.moreInfo = More info
 lecturer.course.form.label.lecturer = Lecturer
+lecturer.course.form.button.lectures = Lectures
 
 
 

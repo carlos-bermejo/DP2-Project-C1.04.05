@@ -67,4 +67,5 @@ master.menu.any.courses = Cursos
 # master.menu.lecturer ###################################################
 master.menu.lecturer = Profesor
 master.menu.lecturer.courses = Mis cursos
+master.menu.lecturer.lectures = Mis clases
 
