@@ -13,3 +13,6 @@
 	<acme:list-column code="lecturer.course.list.label.moreInfo" path="moreInfo"/>
 	<acme:list-column code="lecturer.course.list.label.lecturer" path="lecturer"/>
 </acme:list>
+<jstl:if test="${_command == 'list-mine'}">
+	<acme:button code="lecturer.course.list.button.create" action="/lecturer/course/create"/>
+</jstl:if>

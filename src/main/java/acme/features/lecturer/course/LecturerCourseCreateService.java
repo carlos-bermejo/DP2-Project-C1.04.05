@@ -10,25 +10,24 @@
  * they accept any liabilities with respect to them.
  */
 
-package acme.features.lecturer.lecture;
+package acme.features.lecturer.course;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import acme.entities.course.Lecture;
+import acme.entities.course.Course;
 import acme.enumerates.Nature;
-import acme.framework.components.jsp.SelectChoices;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
 @Service
-public class LecturerLectureCreateService extends AbstractService<Lecturer, Lecture> {
+public class LecturerCourseCreateService extends AbstractService<Lecturer, Course> {
 
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected LecturerLectureRepository repository;
+	protected LecturerCourseRepository repository;
 
 
 	@Override
@@ -43,41 +42,39 @@ public class LecturerLectureCreateService extends AbstractService<Lecturer, Lect
 
 	@Override
 	public void load() {
-		final Lecture object;
+		final Course object;
 		final int id = super.getRequest().getPrincipal().getAccountId();
 		final Lecturer lecturer = this.repository.getLecturerByAccountId(id);
 
-		object = new Lecture();
+		object = new Course();
 		object.setLecturer(lecturer);
 		object.setDraftMode(true);
+		object.setNature(Nature.BALANCED);
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
-	public void bind(final Lecture object) {
-		super.bind(object, "title", "lectureAbstract", "nature", "body", "moreInfo");
+	public void bind(final Course object) {
+		super.bind(object, "code", "title", "courseAbstract", "retailPrice", "moreInfo");
 	}
 
 	@Override
-	public void validate(final Lecture object) {
+	public void validate(final Course object) {
 		//No custom constraints to implement
 	}
 
 	@Override
-	public void perform(final Lecture object) {
+	public void perform(final Course object) {
 		this.repository.save(object);
 	}
 
 	@Override
-	public void unbind(final Lecture object) {
+	public void unbind(final Course object) {
 		Tuple tuple;
-		SelectChoices choices;
-		choices = SelectChoices.from(Nature.class, object.getNature());
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo", "draftMode");
+		tuple = super.unbind(object, "code", "title", "courseAbstract", "retailPrice", "moreInfo");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
-		tuple.put("natures", choices);
 		super.getResponse().setData(tuple);
 	}
 

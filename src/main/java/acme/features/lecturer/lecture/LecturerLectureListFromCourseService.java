@@ -37,7 +37,7 @@ public class LecturerLectureListFromCourseService extends AbstractService<Lectur
 	@Override
 	public void load() {
 		final int courseId = super.getRequest().getData("masterId", int.class);
-		final List<Lecture> object = this.repository.listLecturesFromCourse(courseId);
+		final List<Lecture> object = this.repository.getLecturesFromCourse(courseId);
 
 		super.getBuffer().setData(object);
 	}

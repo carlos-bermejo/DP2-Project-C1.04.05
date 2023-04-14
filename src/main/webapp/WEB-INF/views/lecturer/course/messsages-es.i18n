@@ -15,6 +15,7 @@ lecturer.course.list.label.nature = Naturaleza
 lecturer.course.list.label.retailPrice = Precio
 lecturer.course.list.label.moreInfo = más Información
 lecturer.course.list.label.lecturer = Profesor
+lecturer.course.list.button.create = Crear
 
 lecturer.course.form.label.code = Código
 lecturer.course.form.label.title = Titulo
@@ -24,3 +25,9 @@ lecturer.course.form.label.retailPrice = Precio
 lecturer.course.form.label.moreInfo = más Información
 lecturer.course.form.label.lecturer = Profesor
 lecturer.course.form.button.lectures = Clases
+lecturer.course.form.button.submitUpdate = Confirmar
+lecturer.course.form.button.create = Crear
+lecturer.course.form.button.update = Actualizar
+lecturer.course.form.button.publish = Publicar
+lecturer.course.form.button.delete = Eliminar
+lecturer.course.form.error.theoryReject = Los cursos puramente teóricos no pueden ser publicados.

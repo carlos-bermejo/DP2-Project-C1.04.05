@@ -17,9 +17,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import acme.entities.course.Course;
 import acme.entities.course.CourseLecture;
 import acme.entities.course.Lecture;
 import acme.enumerates.Nature;
+import acme.features.lecturer.course.LecturerCourseRepository;
 import acme.framework.components.jsp.SelectChoices;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
@@ -31,8 +33,23 @@ public class LecturerLectureDeleteService extends AbstractService<Lecturer, Lect
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected LecturerLectureRepository repository;
+	protected LecturerLectureRepository	repository;
 
+	@Autowired
+	protected LecturerCourseRepository	courseRepository;
+
+
+	private void updateCourseNature(final Course object) {
+		List<Lecture> lectures;
+		lectures = this.repository.getLecturesFromCourse(object.getId());
+		if (lectures.stream().map(Lecture::getNature).allMatch(n -> n == Nature.THEORETICAL))
+			object.setNature(Nature.THEORETICAL);
+		else if (lectures.stream().map(Lecture::getNature).allMatch(n -> n == Nature.HANDS_ON))
+			object.setNature(Nature.HANDS_ON);
+		else
+			object.setNature(Nature.BALANCED);
+		this.courseRepository.save(object);
+	}
 
 	@Override
 	public void check() {
@@ -85,8 +102,12 @@ public class LecturerLectureDeleteService extends AbstractService<Lecturer, Lect
 		final List<CourseLecture> relations;
 		lectureId = super.getRequest().getData("id", int.class);
 		relations = this.repository.getRelationsFromLectureId(lectureId);
+		final List<Course> courses;
+		courses = this.courseRepository.getCoursesFromLecture(object.getId());
+
 		this.repository.deleteAll(relations);
 		this.repository.delete(object);
+		courses.stream().forEach(this::updateCourseNature);
 	}
 
 	@Override

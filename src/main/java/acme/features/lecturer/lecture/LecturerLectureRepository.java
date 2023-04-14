@@ -17,11 +17,11 @@ public interface LecturerLectureRepository extends AbstractRepository {
 	@Query("select l from Lecture l where l.id = :id")
 	public Lecture getLectureById(int id);
 
-	@Query("select cl.lecture from CourseLecture cl where cl.course.lecturer.userAccount.id = :id")
-	public List<Lecture> listAllLecturesFromLecturer(int id);
+	@Query("select l from Lecture l where l.lecturer.userAccount.id = :id")
+	public List<Lecture> getAllLecturesFromLecturer(int id);
 
 	@Query("select cl.lecture from CourseLecture cl where cl.course.id = :id")
-	public List<Lecture> listLecturesFromCourse(int id);
+	public List<Lecture> getLecturesFromCourse(int id);
 
 	@Query("select l from Lecturer l where l.id = :id")
 	public Lecturer getLecturerById(int id);

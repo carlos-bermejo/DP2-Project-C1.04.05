@@ -10,45 +10,26 @@
  * they accept any liabilities with respect to them.
  */
 
-package acme.features.lecturer.lecture;
-
-import java.util.List;
+package acme.features.lecturer.course;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import acme.entities.course.Course;
-import acme.entities.course.Lecture;
 import acme.enumerates.Nature;
-import acme.features.lecturer.course.LecturerCourseRepository;
 import acme.framework.components.jsp.SelectChoices;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
 @Service
-public class LecturerLectureUpdateService extends AbstractService<Lecturer, Lecture> {
+public class LecturerCourseUpdateService extends AbstractService<Lecturer, Course> {
 
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected LecturerLectureRepository	repository;
+	protected LecturerCourseRepository repository;
 
-	@Autowired
-	protected LecturerCourseRepository	courseRepository;
-
-
-	private void updateCourseNature(final Course object) {
-		List<Lecture> lectures;
-		lectures = this.repository.getLecturesFromCourse(object.getId());
-		if (lectures.stream().map(Lecture::getNature).allMatch(n -> n == Nature.THEORETICAL))
-			object.setNature(Nature.THEORETICAL);
-		else if (lectures.stream().map(Lecture::getNature).allMatch(n -> n == Nature.HANDS_ON))
-			object.setNature(Nature.HANDS_ON);
-		else
-			object.setNature(Nature.BALANCED);
-		this.courseRepository.save(object);
-	}
 
 	@Override
 	public void check() {
@@ -63,54 +44,51 @@ public class LecturerLectureUpdateService extends AbstractService<Lecturer, Lect
 	public void authorise() {
 		boolean status;
 		int masterId;
-		Lecture lecture;
+		Course course;
 		Lecturer lecturer;
 
 		masterId = super.getRequest().getData("id", int.class);
-		lecture = this.repository.getLectureById(masterId);
-		lecturer = lecture == null ? null : lecture.getLecturer();
-		status = lecture != null && lecture.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
+		course = this.repository.getCourseById(masterId);
+		lecturer = course == null ? null : course.getLecturer();
+		status = course != null && course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
 
 		super.getResponse().setAuthorised(status);
 	}
 
 	@Override
 	public void load() {
-		Lecture object;
+		Course object;
 		int id;
 
 		id = super.getRequest().getData("id", int.class);
-		object = this.repository.getLectureById(id);
+		object = this.repository.getCourseById(id);
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
-	public void bind(final Lecture object) {
-		super.bind(object, "title", "lectureAbstract", "nature", "body", "moreInfo");
+	public void bind(final Course object) {
+		super.bind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
+
 	}
 
 	@Override
-	public void validate(final Lecture object) {
+	public void validate(final Course object) {
 		//No custom constraints to implement
 	}
 
 	@Override
-	public void perform(final Lecture object) {
-		final List<Course> courses;
-		courses = this.courseRepository.getCoursesFromLecture(object.getId());
-
+	public void perform(final Course object) {
 		this.repository.save(object);
-		courses.stream().forEach(this::updateCourseNature);
 	}
 
 	@Override
-	public void unbind(final Lecture object) {
+	public void unbind(final Course object) {
 		Tuple tuple;
 		SelectChoices choices;
 		choices = SelectChoices.from(Nature.class, object.getNature());
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo");
+		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
 		tuple.put("natures", choices);
 		super.getResponse().setData(tuple);

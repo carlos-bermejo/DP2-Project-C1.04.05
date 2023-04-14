@@ -15,3 +15,5 @@
 <jstl:if test="${_command == 'list-all'}">
 	<acme:button code="lecturer.lecture.list.button.create" action="/lecturer/lecture/create"/>
 </jstl:if>
+
+

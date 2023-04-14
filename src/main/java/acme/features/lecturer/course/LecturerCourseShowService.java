@@ -35,7 +35,7 @@ public class LecturerCourseShowService extends AbstractService<Lecturer, Course>
 		boolean status;
 		final Principal principal = super.getRequest().getPrincipal();
 		final int id = super.getRequest().getData("id", int.class);
-		final Course course = this.repository.showCourse(id);
+		final Course course = this.repository.getCourseById(id);
 		status = course.getLecturer().getUserAccount().getId() == principal.getAccountId();
 		super.getResponse().setAuthorised(status);
 	}
@@ -43,7 +43,7 @@ public class LecturerCourseShowService extends AbstractService<Lecturer, Course>
 	@Override
 	public void load() {
 		final int id = super.getRequest().getData("id", int.class);
-		final Course object = this.repository.showCourse(id);
+		final Course object = this.repository.getCourseById(id);
 
 		super.getBuffer().setData(object);
 	}
@@ -52,7 +52,7 @@ public class LecturerCourseShowService extends AbstractService<Lecturer, Course>
 	public void unbind(final Course object) {
 		Tuple tuple;
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
+		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo", "draftMode");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
 		super.getResponse().setData(tuple);
 	}

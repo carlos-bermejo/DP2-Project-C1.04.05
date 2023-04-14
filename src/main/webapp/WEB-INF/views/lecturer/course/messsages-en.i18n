@@ -15,6 +15,7 @@ lecturer.course.list.label.nature = Nature
 lecturer.course.list.label.retailPrice = Price
 lecturer.course.list.label.moreInfo = More info
 lecturer.course.list.label.lecturer = Lecturer
+lecturer.course.list.button.create = Create
 
 lecturer.course.form.label.code = Code
 lecturer.course.form.label.title = Title
@@ -24,6 +25,9 @@ lecturer.course.form.label.retailPrice = Price
 lecturer.course.form.label.moreInfo = More info
 lecturer.course.form.label.lecturer = Lecturer
 lecturer.course.form.button.lectures = Lectures
-
-
-
+lecturer.course.form.button.submitUpdate = Submit
+lecturer.course.form.button.create = Create
+lecturer.course.form.button.update = Update
+lecturer.course.form.button.publish = Publish
+lecturer.course.form.button.delete = Delete
+lecturer.course.form.error.theoryReject = Pure theoretical courses can't be published
