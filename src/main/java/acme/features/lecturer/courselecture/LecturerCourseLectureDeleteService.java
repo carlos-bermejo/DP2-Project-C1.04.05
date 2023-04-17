@@ -29,7 +29,7 @@ import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
 @Service
-public class LecturerCourseLectureAddLectureService extends AbstractService<Lecturer, CourseLecture> {
+public class LecturerCourseLectureDeleteService extends AbstractService<Lecturer, CourseLecture> {
 
 	// Internal state ---------------------------------------------------------
 
@@ -55,81 +55,76 @@ public class LecturerCourseLectureAddLectureService extends AbstractService<Lect
 		this.courseRepository.save(object);
 	}
 
-
-	private final String requestId = "masterId";
-
-
 	@Override
 	public void check() {
 		boolean status;
-		status = super.getRequest().hasData(this.requestId, int.class);
+
+		status = super.getRequest().hasData("id", int.class);
+
 		super.getResponse().setChecked(status);
 	}
 
 	@Override
 	public void authorise() {
 		boolean status;
-		int courseId;
-		Course course;
+		int masterId;
+		CourseLecture courseLecture;
 		Lecturer lecturer;
+		Course course;
+		masterId = super.getRequest().getData("id", int.class);
+		courseLecture = this.repository.getCourseLectureById(masterId);
+		course = courseLecture.getCourse();
 
-		courseId = super.getRequest().getData(this.requestId, int.class);
-		course = this.courseRepository.getCourseById(courseId);
-		lecturer = course == null ? null : course.getLecturer();
-		status = course != null && course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
+		lecturer = courseLecture == null ? null : courseLecture.getCourse().getLecturer();
+		status = courseLecture != null && course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
 
 		super.getResponse().setAuthorised(status);
 	}
 
 	@Override
 	public void load() {
-		final CourseLecture object;
-		final Course course;
-		int courseId;
-		courseId = super.getRequest().getData(this.requestId, int.class);
+		CourseLecture object;
+		int id;
 
-		course = this.courseRepository.getCourseById(courseId);
-		object = new CourseLecture();
-		object.setCourse(course);
+		id = super.getRequest().getData("id", int.class);
+		object = this.repository.getCourseLectureById(id);
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
 	public void bind(final CourseLecture object) {
-		super.bind(object, "lecture");
+		super.bind(object, "code", "title", "courseAbstract", "retailPrice", "moreInfo");
 	}
 
 	@Override
 	public void validate(final CourseLecture object) {
-		//
+		//No custom constraints to implement
 	}
 
 	@Override
 	public void perform(final CourseLecture object) {
-		int id;
-		Course course;
-		id = object.getCourse().getId();
-		course = this.courseRepository.getCourseById(id);
-		this.repository.save(object);
+		final Course course = object.getCourse();
+		this.repository.delete(object);
 		this.updateCourseNature(course);
-		this.courseRepository.save(course);
 	}
 
 	@Override
 	public void unbind(final CourseLecture object) {
 		Tuple tuple;
 		int lecturerId;
-		int courseId;
-		SelectChoices choices;
-		courseId = object.getCourse().getId();
+		final SelectChoices lectureChoices;
+		final SelectChoices courseChoices;
 		lecturerId = super.getRequest().getPrincipal().getAccountId();
-		final List<Lecture> lectures = this.repository.getAllLecturesNotInCourseFromLecturer(lecturerId, courseId);
-		choices = SelectChoices.from(lectures, "title", object.getLecture());
+		final List<Lecture> lectures = this.lectureRepository.getAllLecturesFromLecturer(lecturerId);
+		final List<Course> courses = this.courseRepository.getCoursesFromLecturer(lecturerId);
+		courseChoices = SelectChoices.from(courses, "title", object.getCourse());
+		lectureChoices = SelectChoices.from(lectures, "title", object.getLecture());
 		tuple = new Tuple();
-		tuple.put("course", object.getCourse().getTitle());
-		tuple.put("lecture", choices.getSelected().getKey());
-		tuple.put("lectures", choices);
+		tuple.put("course", courseChoices.getSelected());
+		tuple.put("courses", courseChoices);
+		tuple.put("lecture", lectureChoices.getSelected());
+		tuple.put("lectures", lectureChoices);
 		super.getResponse().setData(tuple);
 	}
 

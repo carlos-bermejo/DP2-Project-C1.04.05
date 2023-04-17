@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import acme.entities.course.Course;
 import acme.entities.course.CourseLecture;
+import acme.features.lecturer.courselecture.LecturerCourseLectureRepository;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
@@ -29,7 +30,10 @@ public class LecturerCourseDeleteService extends AbstractService<Lecturer, Cours
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected LecturerCourseRepository repository;
+	protected LecturerCourseRepository			repository;
+
+	@Autowired
+	protected LecturerCourseLectureRepository	relationsRepository;
 
 
 	@Override
@@ -50,8 +54,8 @@ public class LecturerCourseDeleteService extends AbstractService<Lecturer, Cours
 
 		masterId = super.getRequest().getData("id", int.class);
 		course = this.repository.getCourseById(masterId);
-		lecturer = course == null ? null : course.getLecturer();
-		status = course != null && course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
+		lecturer = course.getLecturer();
+		status = course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
 
 		super.getResponse().setAuthorised(status);
 	}
@@ -82,9 +86,9 @@ public class LecturerCourseDeleteService extends AbstractService<Lecturer, Cours
 		int courseId;
 		final List<CourseLecture> relations;
 		courseId = super.getRequest().getData("id", int.class);
-		relations = this.repository.getRelationsFromCourseId(courseId);
+		relations = this.relationsRepository.getRelationsFromCourseId(courseId);
 
-		this.repository.deleteAll(relations);
+		this.relationsRepository.deleteAll(relations);
 		this.repository.delete(object);
 	}
 

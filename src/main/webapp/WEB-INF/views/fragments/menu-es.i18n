@@ -68,4 +68,5 @@ master.menu.any.courses = Cursos
 master.menu.lecturer = Profesor
 master.menu.lecturer.courses = Mis cursos
 master.menu.lecturer.lectures = Mis clases
+master.menu..lecturer.courseLectures = Añadir clases a cursos
 

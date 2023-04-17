@@ -35,6 +35,5 @@
 		<acme:button code="lecturer.course.form.button.update" action="/lecturer/course/update?id=${id}"/>
 		<acme:submit code="lecturer.course.form.button.publish" action="/lecturer/course/publish?id=${id}"/>
 		<acme:submit code="lecturer.course.form.button.delete" action="/lecturer/course/delete?id=${id}"/>
-		<acme:button code="lecturer.course.form.button.addLecture" action="/lecturer/course-lecture/create?masterId=${id}"/>
 	</jstl:if>
 </acme:form>

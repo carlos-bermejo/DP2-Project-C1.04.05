@@ -12,10 +12,14 @@
 
 package acme.features.lecturer.course;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import acme.entities.course.Course;
+import acme.entities.course.Lecture;
 import acme.enumerates.Nature;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
@@ -72,9 +76,14 @@ public class LecturerCoursePublishService extends AbstractService<Lecturer, Cour
 
 	@Override
 	public void validate(final Course object) {
-		if (!super.getBuffer().getErrors().hasErrors("nature")) {
+		if (!super.getBuffer().getErrors().hasErrors("*")) {
 			final Nature nature = object.getNature();
-			super.state(nature == Nature.THEORETICAL, "nature", "lecturer.course.form.error.theoryReject");
+			super.state(nature != Nature.THEORETICAL, "*", "lecturer.course.form.error.theoryReject");
+		}
+		if (!super.getBuffer().getErrors().hasErrors("*")) {
+			final List<Lecture> lectures = this.repository.getLecturesFromCourse(object.getId());
+			final Stream<Boolean> lecturesDraftModes = lectures.stream().map(Lecture::isDraftMode);
+			super.state(lecturesDraftModes.allMatch(dm -> !dm), "*", "lecturer.course.form.error.notPublishedLectures");
 		}
 	}
 
@@ -88,7 +97,7 @@ public class LecturerCoursePublishService extends AbstractService<Lecturer, Cour
 	public void unbind(final Course object) {
 		Tuple tuple;
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "code", "title", "courseAbstract", "retailPrice", "moreInfo");
+		tuple = super.unbind(object, "code", "title", "nature", "courseAbstract", "retailPrice", "moreInfo", "draftMode");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
 		super.getResponse().setData(tuple);
 	}

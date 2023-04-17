@@ -8,4 +8,12 @@
 # purposes.  The copyright owner does not offer lecturer warranties or representations, nor do
 # they accept lecturer liabilities with respect to them.
 
-lecturer.courseLecture.form.error.emptyLecture = La clase no puede estar vacía
+lecturer.courseLecture.list.label.course = Curso
+lecturer.course.list.label.lecture = Clase
+lecturer.courseLecture.form.course= Curso
+lecturer.courseLecture.form.lecture = Clase
+
+lecturer.courseLecture.form.button.delete = Eliminar
+lecturer.courseLecture.form.button.create = Crear
+lecturer.courseLecture.list.button.create = Crear
+lecturer.courseLecture.form.error.publishedCourse = Este curso ya ha sido publicado, no puede modificarse.

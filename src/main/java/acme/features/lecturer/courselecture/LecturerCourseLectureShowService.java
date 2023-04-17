@@ -10,33 +10,37 @@
  * they accept any liabilities with respect to them.
  */
 
-package acme.features.lecturer.course;
+package acme.features.lecturer.courselecture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import acme.entities.course.Course;
-import acme.enumerates.Nature;
-import acme.framework.components.jsp.SelectChoices;
+import acme.entities.course.CourseLecture;
+import acme.features.lecturer.course.LecturerCourseRepository;
+import acme.features.lecturer.lecture.LecturerLectureRepository;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
 @Service
-public class LecturerCourseUpdateService extends AbstractService<Lecturer, Course> {
+public class LecturerCourseLectureShowService extends AbstractService<Lecturer, CourseLecture> {
 
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected LecturerCourseRepository repository;
+	protected LecturerCourseLectureRepository	repository;
+
+	@Autowired
+	protected LecturerLectureRepository			lectureRepository;
+
+	@Autowired
+	protected LecturerCourseRepository			courseRepository;
 
 
 	@Override
 	public void check() {
 		boolean status;
-
 		status = super.getRequest().hasData("id", int.class);
-
 		super.getResponse().setChecked(status);
 	}
 
@@ -44,53 +48,34 @@ public class LecturerCourseUpdateService extends AbstractService<Lecturer, Cours
 	public void authorise() {
 		boolean status;
 		int masterId;
-		Course course;
+		CourseLecture courseLecture;
 		Lecturer lecturer;
 
 		masterId = super.getRequest().getData("id", int.class);
-		course = this.repository.getCourseById(masterId);
-		lecturer = course == null ? null : course.getLecturer();
-		status = course != null && course.isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
+		courseLecture = this.repository.getCourseLectureById(masterId);
+		lecturer = courseLecture == null ? null : courseLecture.getCourse().getLecturer();
+		status = courseLecture != null && courseLecture.getCourse().isDraftMode() && super.getRequest().getPrincipal().hasRole(lecturer);
 
 		super.getResponse().setAuthorised(status);
 	}
 
 	@Override
 	public void load() {
-		Course object;
 		int id;
-
+		final CourseLecture object;
 		id = super.getRequest().getData("id", int.class);
-		object = this.repository.getCourseById(id);
+
+		object = this.repository.getCourseLectureById(id);
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
-	public void bind(final Course object) {
-		super.bind(object, "code", "title", "courseAbstract", "retailPrice", "moreInfo");
-
-	}
-
-	@Override
-	public void validate(final Course object) {
-		//No custom constraints to implement
-	}
-
-	@Override
-	public void perform(final Course object) {
-		this.repository.save(object);
-	}
-
-	@Override
-	public void unbind(final Course object) {
+	public void unbind(final CourseLecture object) {
 		Tuple tuple;
-		SelectChoices choices;
-		choices = SelectChoices.from(Nature.class, object.getNature());
-		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
-		tuple.put("lecturer", lecturer.getIdentity().getFullName());
-		tuple.put("natures", choices);
+		tuple = super.unbind(object, "id");
+		tuple.put("course", object.getCourse().getCode());
+		tuple.put("lecture", object.getLecture().getTitle());
 		super.getResponse().setData(tuple);
 	}
 

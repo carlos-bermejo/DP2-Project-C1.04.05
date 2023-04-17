@@ -31,3 +31,4 @@ lecturer.course.form.button.update = Update
 lecturer.course.form.button.publish = Publish
 lecturer.course.form.button.delete = Delete
 lecturer.course.form.error.theoryReject = Pure theoretical courses can't be published
+lecturer.course.form.error.notPublishedLectures = All the lectures in this course must be published before publishing the course
