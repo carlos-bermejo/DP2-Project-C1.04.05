@@ -13,3 +13,5 @@ administrator.system-currency.form.label.supported-currencies = Monedas soportad
 administrator.system-currency.form.button.update= Actualizar
 administrator.system-currency.form.button.submitUpdate= Confirmar
 administrator.systemCurrency.form.error.notSupportedCurrency= La moneda actual debe estar soportada
+administrator.system-currency.form.label.supported-currencies = Monedas soportadas
+
