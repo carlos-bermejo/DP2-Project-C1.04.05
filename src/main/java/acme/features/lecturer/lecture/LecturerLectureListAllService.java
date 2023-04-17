@@ -1,24 +1,24 @@
 
-package acme.features.any.course;
+package acme.features.lecturer.lecture;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import acme.entities.course.Course;
-import acme.framework.components.accounts.Any;
+
+import acme.entities.course.Lecture;
+import acme.framework.components.accounts.Principal;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
-
 @Service
-public class AnyCourseListService extends AbstractService<Any, Course> {
+public class LecturerLectureListAllService extends AbstractService<Lecturer, Lecture> {
 
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected AnyCourseRepository repository;
+	protected LecturerLectureRepository repository;
 
 	// AbstractService<Authenticated, Consumer> ---------------------------
 
@@ -35,17 +35,19 @@ public class AnyCourseListService extends AbstractService<Any, Course> {
 
 	@Override
 	public void load() {
-		final List<Course> object = this.repository.listCourses();
+		final Principal principal = super.getRequest().getPrincipal();
+		final List<Lecture> object = this.repository.getAllLecturesFromLecturer(principal.getAccountId());
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
-	public void unbind(final Course object) {
+	public void unbind(final Lecture object) {
 		Tuple tuple;
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
+		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo", "draftMode");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
+		tuple.put("lecturerId", lecturer.getId());
 		super.getResponse().setData(tuple);
 	}
 }
