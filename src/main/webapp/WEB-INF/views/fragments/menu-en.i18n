@@ -64,7 +64,8 @@ master.menu.any = Any
 master.menu.any.peeps = Peeps
 master.menu.any.courses = Courses
 
-# master.menu.authenticated ####################################################
-master.menu.authenticated = Authenticated
-master.menu.authenticated.note = Notes
-
+# master.menu.lecturer ###################################################
+master.menu.lecturer = Lecturer
+master.menu.lecturer.courses = My courses
+master.menu.lecturer.lectures = My lectures
+master.menu.lecturer.courseLectures = Add lectures to courses

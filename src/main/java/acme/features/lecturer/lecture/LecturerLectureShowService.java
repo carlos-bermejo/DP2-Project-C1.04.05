@@ -1,22 +1,22 @@
 
-package acme.features.any.course;
+package acme.features.lecturer.lecture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import acme.entities.course.Course;
-import acme.framework.components.accounts.Any;
+import acme.entities.course.Lecture;
+import acme.framework.components.accounts.Principal;
 import acme.framework.components.models.Tuple;
 import acme.framework.services.AbstractService;
 import acme.roles.Lecturer;
 
 @Service
-public class AnyCourseShowService extends AbstractService<Any, Course> {
+public class LecturerLectureShowService extends AbstractService<Lecturer, Lecture> {
 
 	// Internal state ---------------------------------------------------------
 
 	@Autowired
-	protected AnyCourseRepository repository;
+	protected LecturerLectureRepository repository;
 
 	// AbstractService<Authenticated, Consumer> ---------------------------
 
@@ -32,23 +32,29 @@ public class AnyCourseShowService extends AbstractService<Any, Course> {
 
 	@Override
 	public void authorise() {
-		super.getResponse().setAuthorised(true);
+		boolean status;
+		final Principal principal = super.getRequest().getPrincipal();
+		final int id = super.getRequest().getData("id", int.class);
+		final Lecture lecture = this.repository.getLectureById(id);
+		status = lecture.getLecturer().getUserAccount().getId() == principal.getAccountId();
+		super.getResponse().setAuthorised(status);
 	}
 
 	@Override
 	public void load() {
 		final int id = super.getRequest().getData("id", int.class);
-		final Course object = this.repository.showCourse(id);
+		final Lecture object = this.repository.getLectureById(id);
 
 		super.getBuffer().setData(object);
 	}
 
 	@Override
-	public void unbind(final Course object) {
+	public void unbind(final Lecture object) {
 		Tuple tuple;
 		final Lecturer lecturer = object.getLecturer();
-		tuple = super.unbind(object, "code", "title", "courseAbstract", "nature", "retailPrice", "moreInfo");
+		tuple = super.unbind(object, "title", "lectureAbstract", "nature", "body", "moreInfo", "draftMode");
 		tuple.put("lecturer", lecturer.getIdentity().getFullName());
+		tuple.put("lecturerId", lecturer.getId());
 		super.getResponse().setData(tuple);
 	}
 }

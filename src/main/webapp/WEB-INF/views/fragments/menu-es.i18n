@@ -34,7 +34,6 @@ master.menu.administrator.populate-sample = Poblar BD (ejemplos)
 master.menu.administrator.shut-down = Parar el sistema
 master.menu.administrator.system-currency = Moneda del sistema
 
-
 # master.menu.provider ########################################################
 
 master.menu.provider = Proveedor
@@ -63,5 +62,11 @@ master.menu.authenticated.note = Notas
 # master.menu.any ###################################################
 master.menu.any = Cualquiera
 master.menu.any.peeps = Peeps
-master.menu.any.Courses = Cursos
+master.menu.any.courses = Cursos
+
+# master.menu.lecturer ###################################################
+master.menu.lecturer = Profesor
+master.menu.lecturer.courses = Mis cursos
+master.menu.lecturer.lectures = Mis clases
+master.menu..lecturer.courseLectures = Añadir clases a cursos
 
