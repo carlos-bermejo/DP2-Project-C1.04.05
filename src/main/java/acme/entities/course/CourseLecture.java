@@ -13,6 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+
 public class CourseLecture extends AbstractEntity {
 	// Serialisation identifier -----------------------------------------------
 
